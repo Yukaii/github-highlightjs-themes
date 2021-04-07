@@ -1,4 +1,4 @@
-const { getColors } = require('github-vscode-theme/src/primer')
+const { getColors } = require('github-vscode-theme/src/colors')
 
 const {
   GENERAL_TOKENS,
@@ -10,17 +10,64 @@ const {
   DIFF_TOKENS
 } = require('./tokens')
 
-export function getTheme ({ style }) {
+export function generateHighlightJsStyle (theme) {
+  const styles = theme.colors.filter(entry => {
+    return Array.isArray(entry.scope) ? entry.scope.length > 0 : entry.scope && entry.scope.length > 0
+  }).map(entry => {
+    const klasses = Array.isArray(entry.scope) ? entry.scope.map(k => `.hljs-${k}`).join(',') : entry.scope
+    
+    const rawStyles = []
+    
+    if (entry.settings.foreground) {
+      rawStyles.push(`color: ${entry.settings.foreground};`)
+    }
+    
+    if (entry.settings.fontStyle) {
+      rawStyles.push(`font-style: ${entry.settings.fontStyle};`)
+    }
+    
+    if (entry.settings.background) {
+      rawStyles.push(`background-color: ${entry.settings.background};`)
+    }
+
+    return `${klasses} {
+      ${rawStyles.join('\n')}
+    }`
+  }).join('\n')
+
+  return(`
+  .hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0.5em;
+
+    color: ${theme.foregroundColor};
+    background: ${theme.backgroundColor};
+  }
+  
+  ${styles}
+`)
+}
+
+export function getTheme ({ theme }) {
   const themes = (options) => options[theme];
   const color = getColors(theme);
   const scale = color.scale;
 
   const editorForeground = themes({ light: color.text.primary, dark: color.text.primary, dimmed: scale.gray[0] });
-  
+
   return {
+    backgroundColor: color.bg.canvas,
+    foregroundColor: editorForeground,
     colors: [
       {
-        scope: ["comment", "punctuation.definition.comment", "string.comment"],
+        scope: [
+        /*
+          "comment", "punctuation.definition.comment", "string.comment"
+        */
+          GENERAL_TOKENS.COMMENT,
+          GENERAL_TOKENS.PUNCTUATION
+        ],
         settings: {
           foreground: themes({ light: scale.gray[5], dark: scale.gray[3], dimmed: scale.gray[3] }),
         },
@@ -39,9 +86,12 @@ export function getTheme ({ style }) {
       },
       {
         scope: [
+        /*
           "entity.name",
           "meta.export.default",
-          "meta.definition.variable"
+          "meta.definition.variable",
+        */
+          META_TOKENS.META
         ],
         settings: {
           foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
@@ -49,45 +99,70 @@ export function getTheme ({ style }) {
       },
       {
         scope: [
+        /*
           "variable.parameter.function",
           "meta.jsx.children",
           "meta.block",
           "meta.tag.attributes",
           "entity.name.constant",
           "meta.object.member",
-          "meta.embedded.expression"
+          "meta.embedded.expression",
+        */
+          GENERAL_TOKENS.PARAMS,
+          TAG_ATTR_CONF_TOKENS.ATTR,
+          TAG_ATTR_CONF_TOKENS.ATTRIBUTE,
         ],
         settings: {
           foreground: editorForeground,
         },
       },
       {
-        "scope": "entity.name.function",
+        "scope": [
+        /*
+          "entity.name.function"
+        */
+          GENERAL_TOKENS.FUNCTION
+        ],
         "settings": {
           foreground: themes({ light: scale.purple[5], dark: scale.purple[2], dimmed: scale.purple[2] }),
         }
       },
       {
         "scope": [
+        /*
           "entity.name.tag",
           "support.class.component"
+        */
+          GENERAL_TOKENS.CLASS,
+          TAG_ATTR_CONF_TOKENS.TAG
         ],
         settings: {
           foreground: themes({ light: scale.green[6], dark: scale.green[1], dimmed: scale.green[1] }),
         },
       },
       {
-        scope: "keyword",
+        scope: [
+        /*
+          "keyword"
+        */
+          GENERAL_TOKENS.KEYWORD
+        ],
         settings: {
           foreground: themes({ light: scale.red[5], dark: scale.red[3], dimmed: scale.red[3] }),
         },
       },
       {
-        scope: ["storage", "storage.type"],
+        scope: [
+        /*
+          "storage", "storage.type"
+        */
+          GENERAL_TOKENS.TYPE
+        ],
         settings: {
           foreground: themes({ light: scale.red[5], dark: scale.red[3], dimmed: scale.red[3] }),
         },
       },
+      /*
       {
         scope: [
           "storage.modifier.package",
@@ -98,34 +173,51 @@ export function getTheme ({ style }) {
           foreground: editorForeground,
         },
       },
+      */
       {
         scope: [
+        /*
           "string",
           "punctuation.definition.string",
           "string punctuation.section.embedded source",
+        */
+          GENERAL_TOKENS.STRING,
+          META_TOKENS.STRING
         ],
         settings: {
           foreground: themes({ light: scale.blue[8], dark: scale.blue[1], dimmed: scale.blue[1] }),
         },
       },
+      /*
       {
         scope: "support",
         settings: {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
+      */
       {
-        scope: "meta.property-name",
+        scope: [
+          /*
+          "meta.property-name"
+          */
+        ],
         settings: {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
       {
-        scope: "variable",
+        scope: [
+        /*
+          "variable"
+        */
+          GENERAL_TOKENS.VARIABLE
+        ],
         settings: {
           foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
         },
       },
+      /*
       {
         scope: "variable.other",
         settings: {
@@ -187,12 +279,19 @@ export function getTheme ({ style }) {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
+      */
       {
-        scope: ["source.regexp", "string.regexp"],
+        scope: [
+        /*
+          "source.regexp", "string.regexp"
+          */
+          GENERAL_TOKENS.REGEXP
+        ],
         settings: {
           foreground: themes({ light: scale.blue[8], dark: scale.blue[1], dimmed: scale.blue[1] }),
         },
       },
+      /*
       {
         scope: [
           "string.regexp.character-class",
@@ -211,12 +310,19 @@ export function getTheme ({ style }) {
           foreground: themes({ light: scale.green[6], dark: scale.green[1], dimmed: scale.green[1] }),
         },
       },
+      */
       {
-        scope: "support.constant",
+        scope: [
+          /*
+          "support.constant"
+          */
+          GENERAL_TOKENS.SYMBOL
+        ],
         settings: {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
+      /*
       {
         scope: "support.variable",
         settings: {
@@ -242,26 +348,43 @@ export function getTheme ({ style }) {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
+      */
       {
-        scope: "markup.quote",
+        scope: [
+          /*
+          "markup.quote"
+          */
+          TEXT_MARKUP_TOKENS.QUOTE
+        ],
         settings: {
           foreground: themes({ light: scale.green[6], dark: scale.green[1], dimmed: scale.green[1] }),
         },
       },
       {
-        scope: "markup.italic",
+        scope: [
+          /*
+          "markup.italic"
+          */
+          TEXT_MARKUP_TOKENS.EMPHASIS
+        ],
         settings: {
           fontStyle: "italic",
           foreground: editorForeground,
         },
       },
       {
-        scope: "markup.bold",
+        scope: [
+          /*
+          "markup.bold"
+          */
+          TEXT_MARKUP_TOKENS.STRONG
+        ],
         settings: {
           fontStyle: "bold",
           foreground: editorForeground,
         },
       },
+      /*
       {
         scope: "markup.raw",
         settings: {
@@ -349,8 +472,14 @@ export function getTheme ({ style }) {
           foreground: themes({ light: scale.red[7], dark: scale.red[2], dimmed: scale.red[2] }),
         },
       },
+      */
       {
-        scope: ["constant.other.reference.link", "string.other.link"],
+        scope: [
+        /*
+          "constant.other.reference.link", "string.other.link"
+          */
+          TEXT_MARKUP_TOKENS.LINK
+        ],
         settings: {
           foreground: themes({ light: scale.blue[8], dark: scale.blue[1], dimmed: scale.blue[1] }),
           fontStyle: "underline",

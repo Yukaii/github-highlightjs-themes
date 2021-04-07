@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel-node index.js"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/node": "^7.13.13",
+    "@babel/preset-env": "^7.13.12",
     "@primer/primitives": "^4.2.0",
     "github-vscode-theme": "primer/github-vscode-theme#github-com-themes"
   }
