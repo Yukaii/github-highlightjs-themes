@@ -14,7 +14,7 @@ export function generateHighlightJsStyle (theme) {
   const styles = theme.colors.filter(entry => {
     return Array.isArray(entry.scope) ? entry.scope.length > 0 : entry.scope && entry.scope.length > 0
   }).map(entry => {
-    const klasses = Array.isArray(entry.scope) ? entry.scope.map(k => `.hljs-${k}`).join(',') : entry.scope
+    const klasses = Array.isArray(entry.scope) ? entry.scope.map(k => `.hljs-${k}`).join(',\n') : entry.scope
     
     const rawStyles = []
     
@@ -31,21 +31,21 @@ export function generateHighlightJsStyle (theme) {
     }
 
     return `${klasses} {
-      ${rawStyles.join('\n')}
-    }`
+  ${rawStyles.join('\n  ')}
+}\n`
   }).join('\n')
 
   return(`
-  .hljs {
-    display: block;
-    overflow-x: auto;
-    padding: 0.5em;
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
 
-    color: ${theme.foregroundColor};
-    background: ${theme.backgroundColor};
-  }
-  
-  ${styles}
+  color: ${theme.foregroundColor};
+  background: ${theme.backgroundColor};
+}
+
+${styles}
 `)
 }
 

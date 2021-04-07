@@ -62,6 +62,6 @@ export const TEMPLATE_TOKENS = {
 }
 
 export const DIFF_TOKENS = { 
-  TEMPLATE_TAG: 'template-tag',
-  TEMPLATE_VARIABLE: 'template-variable',
+  ADDITION: 'addition',
+  DELETION: 'deletion'
 }
