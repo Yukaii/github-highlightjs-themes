@@ -6,3 +6,7 @@
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@primer/primitives/-/primitives-4.2.0.tgz#a54d052bd8b8fcc0a2f5029f44a192939f87f09f"
   integrity sha512-/2/9ueCWWzqaLRSJ3TNGthMVX8DBn/oa+ZY9eB/TmxUPglXd8AQMxV2wz+pAoy8SpXXwe84JuEgHTAghzAOh0w==
+
+github-vscode-theme@primer/github-vscode-theme:
+  version "3.0.0"
+  resolved "https://codeload.github.com/primer/github-vscode-theme/tar.gz/8a9fd1b46e9238c44715d6dcb552ec02826a0a87"

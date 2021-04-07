@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@primer/primitives": "^4.2.0"
+    "@primer/primitives": "^4.2.0",
+    "github-vscode-theme": "primer/github-vscode-theme#github-com-themes"
   }
 }
