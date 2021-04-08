@@ -23,7 +23,11 @@ export function generateHighlightJsStyle (theme) {
     }
     
     if (entry.settings.fontStyle) {
-      rawStyles.push(`font-style: ${entry.settings.fontStyle};`)
+      if (entry.settings.fontStyle === 'bold') {
+        rawStyles.push(`font-weight: ${entry.settings.fontStyle};`)
+      } else {
+        rawStyles.push(`font-style: ${entry.settings.fontStyle};`)
+      }
     }
     
     if (entry.settings.background) {
@@ -74,11 +78,19 @@ export function getTheme ({ theme }) {
       },
       {
         scope: [
+          /*
           "constant",
           "entity.name.constant",
           "variable.other.constant",
           "variable.language",
           "entity",
+          */
+          TAG_ATTR_CONF_TOKENS.ATTR,
+          TAG_ATTR_CONF_TOKENS.ATTRIBUTE,
+          META_TOKENS.META,
+         CSS_TOKENS.SELECTOR_ATTR,
+          CSS_TOKENS.SELECTOR_CLASS,
+          CSS_TOKENS.SELECTOR_ID,
         ],
         settings: {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
@@ -91,7 +103,10 @@ export function getTheme ({ theme }) {
           "meta.export.default",
           "meta.definition.variable",
         */
-          META_TOKENS.META
+          GENERAL_TOKENS.VARIABLE,
+          GENERAL_TOKENS.LITERAL,
+          GENERAL_TOKENS.NUMBER,
+          GENERAL_TOKENS.DOCTAG 
         ],
         settings: {
           foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
@@ -108,9 +123,7 @@ export function getTheme ({ theme }) {
           "meta.object.member",
           "meta.embedded.expression",
         */
-          GENERAL_TOKENS.PARAMS,
-          TAG_ATTR_CONF_TOKENS.ATTR,
-          TAG_ATTR_CONF_TOKENS.ATTRIBUTE,
+          GENERAL_TOKENS.PARAMS
         ],
         settings: {
           foreground: editorForeground,
@@ -134,7 +147,9 @@ export function getTheme ({ theme }) {
           "support.class.component"
         */
           GENERAL_TOKENS.CLASS,
-          TAG_ATTR_CONF_TOKENS.TAG
+          TAG_ATTR_CONF_TOKENS.TAG,
+          GENERAL_TOKENS.TITLE,
+          GENERAL_TOKENS.BUILT_IN
         ],
         settings: {
           foreground: themes({ light: scale.green[6], dark: scale.green[1], dimmed: scale.green[1] }),
@@ -145,7 +160,12 @@ export function getTheme ({ theme }) {
         /*
           "keyword"
         */
-          GENERAL_TOKENS.KEYWORD
+          GENERAL_TOKENS.KEYWORD,
+          GENERAL_TOKENS.TYPE,
+          TAG_ATTR_CONF_TOKENS.BUILTIN_NAME,
+          META_TOKENS.META_KEYWORD,
+          TEMPLATE_TOKENS.TEMPLATE_TAG,
+          TEMPLATE_TOKENS.TEMPLATE_VARIABLE
         ],
         settings: {
           foreground: themes({ light: scale.red[5], dark: scale.red[3], dimmed: scale.red[3] }),
@@ -156,7 +176,6 @@ export function getTheme ({ theme }) {
         /*
           "storage", "storage.type"
         */
-          GENERAL_TOKENS.TYPE
         ],
         settings: {
           foreground: themes({ light: scale.red[5], dark: scale.red[3], dimmed: scale.red[3] }),
@@ -211,7 +230,6 @@ export function getTheme ({ theme }) {
         /*
           "variable"
         */
-          GENERAL_TOKENS.VARIABLE
         ],
         settings: {
           foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
@@ -335,26 +353,39 @@ export function getTheme ({ theme }) {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
+      */
       {
-        scope: "punctuation.definition.list.begin.markdown",
+        scope: [
+          /*
+          "punctuation.definition.list.begin.markdown"
+          */
+          TEXT_MARKUP_TOKENS.BULLET
+        ],
         settings: {
           foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
         },
       },
       {
-        scope: ["markup.heading", "markup.heading entity.name"],
+        scope: [
+          /*
+          "markup.heading", "markup.heading entity.name"
+          */
+          TAG_ATTR_CONF_TOKENS.SECTION
+        ],
         settings: {
           fontStyle: "bold",
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
-      */
       {
         scope: [
           /*
           "markup.quote"
           */
-          TEXT_MARKUP_TOKENS.QUOTE
+          TEXT_MARKUP_TOKENS.QUOTE,
+          TAG_ATTR_CONF_TOKENS.NAME,
+          CSS_TOKENS.SELECTOR_TAG,
+          CSS_TOKENS.SELECTOR_PSEUDO
         ],
         settings: {
           foreground: themes({ light: scale.green[6], dark: scale.green[1], dimmed: scale.green[1] }),
@@ -369,7 +400,7 @@ export function getTheme ({ theme }) {
         ],
         settings: {
           fontStyle: "italic",
-          foreground: editorForeground,
+          foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
         },
       },
       {
@@ -381,7 +412,7 @@ export function getTheme ({ theme }) {
         ],
         settings: {
           fontStyle: "bold",
-          foreground: editorForeground,
+          foreground: themes({ light: scale.orange[6], dark: scale.orange[2], dimmed: scale.orange[2] }),
         },
       },
       /*
@@ -391,11 +422,15 @@ export function getTheme ({ theme }) {
           foreground: themes({ light: scale.blue[6], dark: scale.blue[2], dimmed: scale.blue[2] }),
         },
       },
+      */
       {
         scope: [
+          /*
           "markup.deleted",
           "meta.diff.header.from-file",
           "punctuation.definition.deleted",
+          */
+          DIFF_TOKENS.DELETION
         ],
         settings: {
           background: themes({ light: scale.red[0], dark: scale.red[9], dimmed: scale.red[9] }),
@@ -404,15 +439,19 @@ export function getTheme ({ theme }) {
       },
       {
         scope: [
+          /*
           "markup.inserted",
           "meta.diff.header.to-file",
           "punctuation.definition.inserted",
+          */
+          DIFF_TOKENS.ADDITION
         ],
         settings: {
           background: themes({ light: scale.green[0], dark: scale.green[9], dimmed: scale.green[9] }),
           foreground: themes({ light: scale.green[6], dark: scale.green[1], dimmed: scale.green[1] }),
         },
       },
+      /*
       {
         scope: ["markup.changed", "punctuation.definition.changed"],
         settings: {
