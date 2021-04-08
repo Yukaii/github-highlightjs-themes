@@ -1,5 +1,5 @@
 {
-  "name": "github-highlightjs-theme",
+  "name": "@yukaii/github-highlightjs-themes",
   "version": "1.0.0",
   "description": "GitHub syntax highlight theme variations for highlight.js",
   "main": "index.js",
