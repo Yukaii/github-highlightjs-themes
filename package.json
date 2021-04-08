@@ -1,12 +1,12 @@
 {
-  "name": "github-highlightjs",
+  "name": "github-highlightjs-theme",
   "version": "1.0.0",
-  "description": "",
+  "description": "GitHub syntax highlight theme variations for highlight.js",
   "main": "index.js",
   "scripts": {
     "build": "babel-node index.js"
   },
-  "author": "",
+  "author": "Yukai Huang",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.13.14",
